@@ -51,7 +51,7 @@ platformCollisions2D.forEach((row, y) => {
 const player = new Player({
     position: {
         x: 100,
-        y: 0,
+        y: 300,
     },
     collisionsBlocks: floorcollisionsBlocks,
     imageSrc: "./GameAssets/warrior/Idle.png",
