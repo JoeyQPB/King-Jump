@@ -49,12 +49,11 @@ platformCollisions2D.forEach((row, y) => {
 })
 
 const player = new Player({
-    x: 0,
-    y: 0,
-});
-const player2 = new Player({
-    x: 200,
-    y: 100,
+    position: {
+        x: 100,
+        y: 0,
+    },
+    collisionsBlocks: floorcollisionsBlocks,
 });
 
 const background = new Sprite({
@@ -81,12 +80,12 @@ function animate() {
     platformCollisionsBlocks.forEach((collisionsBlock) => {
         collisionsBlock.update();
     })
-    c.restore();
 
     player.update();
     player.velocity.x = 0
     if (keys.ArrowRight.pressed) player.velocity.x = 5;
     else if (keys.ArrowLeft.pressed) player.velocity.x = -5;
+    c.restore();
 }
 
 const keys = {
@@ -106,13 +105,12 @@ window.addEventListener('keydown', (event) => {
             keys.ArrowLeft.pressed = true;
             break;
         case 'ArrowUp':
-            player.velocity.y -= 20;
+            player.velocity.y -= 10;
             break;
     }
 })
 
 window.addEventListener('keyup', (event) => {
-    console.log(event)
     switch (event.key) {
         case 'ArrowRight':
             keys.ArrowRight.pressed = false;
