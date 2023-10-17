@@ -8,7 +8,7 @@ const scaledCanvas = {
     width: canvas.width / 4,
     height: canvas.height / 4
 }
-const gravity = 0.5;
+const gravity = 0.1;
 
 const floorCollisions2D = [];
 for (let i = 0; i < floorCollisions.length; i += 36) {
@@ -42,7 +42,8 @@ platformCollisions2D.forEach((row, y) => {
                 position: {
                     x: x * 16,
                     y: y * 16
-                }
+                },
+                height: 4
             }))
         }
     })
@@ -53,6 +54,7 @@ const player = new Player({
         x: 100,
         y: 300,
     },
+    platformCollisionsBlocks: platformCollisionsBlocks,
     collisionsBlocks: floorcollisionsBlocks,
     imageSrc: "./GameAssets/warrior/Idle.png",
     frameRate: 8,
@@ -170,7 +172,7 @@ window.addEventListener('keydown', (event) => {
             keys.ArrowLeft.pressed = true;
             break;
         case 'ArrowUp':
-            player.velocity.y -= 10;
+            player.velocity.y = -4;
             break;
     }
 })
