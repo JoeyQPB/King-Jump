@@ -25,6 +25,15 @@ class Player extends Sprite {
             image.src = this.animations[key].imageSrc;
             this.animations[key].image = image;
         }
+
+        this.camerabox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            width: 200,
+            height: 80
+        }
     }
 
     switchSprite(key) {
@@ -36,10 +45,74 @@ class Player extends Sprite {
         this.frameRate = this.animations[key].frameRate;
     }
 
+    updateCameraBox() {
+        this.camerabox = {
+            position: {
+                x: this.position.x - 50,
+                y: this.position.y
+            },
+            width: 200,
+            height: 80
+        }
+    }
+
+    shouldPanCameraToTheLeft({ canvas, camera }) {
+        const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width;
+        const scaledDownCanvasWidth = canvas.width / 4;
+
+        if (cameraboxRightSide >= 576) return
+
+        if (cameraboxRightSide >= scaledDownCanvasWidth + Math.abs(camera.position.x)) {
+            camera.position.x -= this.velocity.x;
+        }
+    }
+
+    shouldPanCameraToTheRight({ canvas, camera }) {
+        if (this.camerabox.position.x <= 0) return
+
+        if (this.camerabox.position.x <= Math.abs(camera.position.x)) {
+            camera.position.x -= this.velocity.x;
+        }
+    }
+
+    shouldPanCameraDown({ canvas, camera }) {
+        if (this.camerabox.position.y + this.velocity.y <= 0) return
+
+        if (this.camerabox.position.y <= Math.abs(camera.position.y)) {
+            camera.position.y -= this.velocity.y
+        }
+    }
+
+    shouldPanCameraUp({ canvas, camera }) {
+        const scaledDownCanvasHeight = canvas.height / 4;
+        if (this.camerabox.position.y + this.camerabox.height + this.velocity.y >= 432) return
+
+        if (this.camerabox.position.y + this.camerabox.height >=
+            Math.abs(camera.position.y) + scaledDownCanvasHeight) {
+            camera.position.y -= this.velocity.y
+        }
+    }
+
+    checkForHorizontalCanvasCollisions() {
+        if (this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 576 ||
+            this.hitbox.position.x + this.velocity.x <= 0) {
+            this.velocity.x = 0;
+        }
+    }
+
     update() {
         this.updateFrames()
         this.updateHitbox()
+        this.updateCameraBox();
 
+        // c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        // c.fillRect(
+        //     this.camerabox.position.x,
+        //     this.camerabox.position.y,
+        //     this.camerabox.width,
+        //     this.camerabox.height
+        // )
+        
         // c.fillStyle = 'rgba(0, 255, 0, 0.2)'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
@@ -50,6 +123,7 @@ class Player extends Sprite {
         //     this.hitbox.width,
         //     this.hitbox.height
         // )
+
         this.draw()
 
         this.position.x += this.velocity.x
