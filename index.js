@@ -187,7 +187,9 @@ window.addEventListener('keydown', (event) => {
             keys.ArrowLeft.pressed = true;
             break;
         case 'ArrowUp':
-            player.velocity.y = -4;
+            if (player.velocity.y === 0) {
+                player.velocity.y = -4;
+            }
             break;
     }
 })
