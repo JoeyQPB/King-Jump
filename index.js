@@ -55,7 +55,49 @@ const player = new Player({
     },
     collisionsBlocks: floorcollisionsBlocks,
     imageSrc: "./GameAssets/warrior/Idle.png",
-    frameRate: 8
+    frameRate: 8,
+    animations: {
+        Idle: {
+            imageSrc: "./GameAssets/warrior/Idle.png",
+            frameRate: 8,
+            frameBuffer: 3
+        },
+        Run: {
+            imageSrc: "./GameAssets/warrior/Run.png",
+            frameRate: 8,
+            frameBuffer: 5
+        },
+        Jump: {
+            imageSrc: "./GameAssets/warrior/Jump.png",
+            frameRate: 2,
+            frameBuffer: 5
+        },
+        Fall: {
+            imageSrc: "./GameAssets/warrior/Fall.png",
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+        FallLeft: {
+            imageSrc: "./GameAssets/warrior/FallLeft.png",
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+        RunLeft: {
+            imageSrc: "./GameAssets/warrior/RunLeft.png",
+            frameRate: 8,
+            frameBuffer: 5,
+        },
+        IdleLeft: {
+            imageSrc: "./GameAssets/warrior/IdleLeft.png",
+            frameRate: 8,
+            frameBuffer: 3,
+        },
+        JumpLeft: {
+            imageSrc: "./GameAssets/warrior/JumpLeft.png",
+            frameRate: 2,
+            frameBuffer: 3,
+        },
+    }
 });
 
 const background = new Sprite({
@@ -84,9 +126,30 @@ function animate() {
     })
 
     player.update();
+
     player.velocity.x = 0
-    if (keys.ArrowRight.pressed) player.velocity.x = 5;
-    else if (keys.ArrowLeft.pressed) player.velocity.x = -5;
+
+    if (keys.ArrowRight.pressed) {
+        player.switchSprite('Run')
+        player.velocity.x = 2;
+        player.lastDirection = 'right';
+    } else if (keys.ArrowLeft.pressed) {
+        player.switchSprite('RunLeft')
+        player.velocity.x = -2;
+        player.lastDirection = 'left';
+    } else if (player.velocity.x === 0) {
+        if (player.lastDirection === 'right') player.switchSprite('Idle');
+        else player.switchSprite('IdleLeft');
+    }
+
+    if (player.velocity.y < 0) {
+        if (player.lastDirection === 'right') player.switchSprite('Jump');
+        else player.switchSprite('JumpLeft');
+    } else if (player.velocity.y > 0) {
+        if (player.lastDirection === 'right') player.switchSprite('Fall');
+        else player.switchSprite('FallLeft');
+    }
+
     c.restore();
 }
 
