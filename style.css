@@ -1,7 +1,11 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: black;
+    background-color: #363636;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .center-div {
@@ -9,4 +13,8 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 10px;
+}
+
+canvas {
+    border: 6px solid black;
 }
